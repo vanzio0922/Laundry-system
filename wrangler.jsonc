@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Nama Worker
+  "name": "vanzio-laundry",
+
+  // File utama
+  "main": "worker.js",
+
+  // Compatibility Date
+  "compatibility_date": "2026-07-03",
+
+  // Aktifkan observability
+  "observability": {
+    "enabled": true
+  },
+
+  // Database D1
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vanzio-laundry-db",
+      "database_id": "ISI_DATABASE_ID_NANTI"
+    }
+  ]
+}
