@@ -3,9 +3,26 @@ export default {
 
     const url = new URL(request.url);
 
+    // ==========================
+    // API DAFTAR HARGA
+    // ==========================
+    if (url.pathname === "/api/services") {
+
+      const { results } = await env.DB.prepare(
+        "SELECT * FROM services ORDER BY id"
+      ).all();
+
+      return Response.json(results);
+
+    }
+
+    // ==========================
+    // DASHBOARD
+    // ==========================
     if (url.pathname === "/") {
 
       return new Response(`
+
 <!DOCTYPE html>
 <html>
 
@@ -19,36 +36,41 @@ body{
 font-family:Arial;
 background:#f4f4f4;
 text-align:center;
-padding:50px;
+padding:40px;
 }
 
 .card{
-
 background:white;
 padding:25px;
 border-radius:15px;
-max-width:400px;
+max-width:700px;
 margin:auto;
 box-shadow:0 0 15px rgba(0,0,0,.15);
-
-}
-
-h1{
-
-color:#1e88e5;
-
 }
 
 button{
-
-padding:15px 25px;
-font-size:18px;
+padding:12px 20px;
 border:none;
-border-radius:10px;
+border-radius:8px;
 background:#1e88e5;
 color:white;
 cursor:pointer;
+margin-bottom:20px;
+}
 
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+}
+
+th{
+background:#1e88e5;
+color:white;
 }
 
 </style>
@@ -63,26 +85,69 @@ cursor:pointer;
 
 <p>Versi 1.0</p>
 
-<p>Cloudflare Workers</p>
+<button onclick="loadHarga()">
+Lihat Daftar Harga
+</button>
 
-<button>System Ready</button>
+<div id="harga"></div>
 
 </div>
+
+<script>
+
+async function loadHarga(){
+
+const res = await fetch("/api/services");
+
+const data = await res.json();
+
+let html = "<table>";
+
+html += "<tr>";
+html += "<th>Layanan</th>";
+html += "<th>Satuan</th>";
+html += "<th>Harga</th>";
+html += "</tr>";
+
+data.forEach(item=>{
+
+html += `
+<tr>
+<td>${item.nama}</td>
+<td>${item.satuan}</td>
+<td>Rp ${item.harga}</td>
+</tr>
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById("harga").innerHTML = html;
+
+}
+
+</script>
 
 </body>
 
 </html>
 
-`,{
-
-headers:{
-"content-type":"text/html;charset=UTF-8"
-}
-
-});
+      `,{
+        headers:{
+          "content-type":"text/html;charset=UTF-8"
+        }
+      });
 
     }
 
-    return new Response("404");
+    // ==========================
+    // 404
+    // ==========================
+
+    return new Response("404 Not Found",{
+      status:404
+    });
+
   }
 }
