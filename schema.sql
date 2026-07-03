@@ -50,27 +50,4 @@ CREATE TABLE IF NOT EXISTS payments (
     payment_method TEXT,
     payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(order_id) REFERENCES orders(id)
-);    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    nama_laundry TEXT,
-
-    alamat TEXT,
-
-    no_wa TEXT,
-
-    catatan_resi TEXT
-
 );
-
--- ==========================================
--- DATA AWAL LAYANAN
--- ==========================================
-
-INSERT INTO services (nama,harga)
-VALUES
-
-('Cuci Kering',6000),
-
-('Cuci Setrika',8000),
-
-('Setrika',5000);
