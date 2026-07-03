@@ -1,74 +1,56 @@
--- ==========================================
+-- ==========================
+-- USERS
+-- ==========================
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    fullname TEXT,
+    role TEXT DEFAULT 'admin',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==========================
 -- CUSTOMERS
--- ==========================================
-
+-- ==========================
 CREATE TABLE IF NOT EXISTS customers (
-
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    nama TEXT NOT NULL,
-
-    no_hp TEXT UNIQUE,
-
-    alamat TEXT,
-
-    latitude REAL,
-
-    longitude REAL,
-
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-
+    name TEXT NOT NULL,
+    phone TEXT,
+    address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- ==========================================
--- SERVICES
--- ==========================================
-
-CREATE TABLE IF NOT EXISTS services (
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    nama TEXT NOT NULL,
-
-    harga INTEGER NOT NULL,
-
-    aktif INTEGER DEFAULT 1
-
-);
-
--- ==========================================
+-- ==========================
 -- ORDERS
--- ==========================================
-
+-- ==========================
 CREATE TABLE IF NOT EXISTS orders (
-
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    no_nota TEXT UNIQUE,
-
+    invoice TEXT UNIQUE,
     customer_id INTEGER,
-
-    service_id INTEGER,
-
-    berat REAL,
-
-    harga INTEGER,
-
-    total INTEGER,
-
-    status TEXT DEFAULT 'DITERIMA',
-
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-
+    service TEXT,
+    weight REAL,
+    price REAL,
+    total REAL,
+    status TEXT DEFAULT 'Masuk',
+    payment_status TEXT DEFAULT 'Belum Lunas',
+    note TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    finished_at DATETIME,
+    FOREIGN KEY(customer_id) REFERENCES customers(id)
 );
 
--- ==========================================
--- SETTINGS
--- ==========================================
-
-CREATE TABLE IF NOT EXISTS settings (
-
+-- ==========================
+-- PAYMENTS
+-- ==========================
+CREATE TABLE IF NOT EXISTS payments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER,
+    amount REAL,
+    payment_method TEXT,
+    payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(order_id) REFERENCES orders(id)
+);    id INTEGER PRIMARY KEY AUTOINCREMENT,
 
     nama_laundry TEXT,
 
