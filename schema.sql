@@ -1,53 +1,44 @@
--- ==========================
--- USERS
--- ==========================
-CREATE TABLE IF NOT EXISTS users (
+-- MASTER HARGA
+CREATE TABLE IF NOT EXISTS services (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    fullname TEXT,
-    role TEXT DEFAULT 'admin',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    nama TEXT NOT NULL,
+    satuan TEXT NOT NULL,
+    harga INTEGER NOT NULL,
+    aktif INTEGER DEFAULT 1
 );
 
--- ==========================
--- CUSTOMERS
--- ==========================
+-- PELANGGAN
 CREATE TABLE IF NOT EXISTS customers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    phone TEXT,
-    address TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    nama TEXT NOT NULL,
+    hp TEXT,
+    alamat TEXT
 );
 
--- ==========================
--- ORDERS
--- ==========================
+-- ORDER
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    invoice TEXT UNIQUE,
     customer_id INTEGER,
-    service TEXT,
-    weight REAL,
-    price REAL,
-    total REAL,
-    status TEXT DEFAULT 'Masuk',
-    payment_status TEXT DEFAULT 'Belum Lunas',
-    note TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    finished_at DATETIME,
-    FOREIGN KEY(customer_id) REFERENCES customers(id)
+    tanggal TEXT,
+    layanan TEXT,
+    berat REAL,
+    total INTEGER,
+    status TEXT DEFAULT 'Masuk'
 );
 
--- ==========================
--- PAYMENTS
--- ==========================
-CREATE TABLE IF NOT EXISTS payments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id INTEGER,
-    amount REAL,
-    payment_method TEXT,
-    payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(order_id) REFERENCES orders(id)
+-- DATA AWAL HARGA
+INSERT INTO services (nama,satuan,harga) VALUES
+('Cuci Kering','Kg',5000),
+('Cuci Setrika','Kg',6000),
+('Setrika','Kg',4000),
+('Bed Cover','Pcs',35000);
+
+CREATE TABLE IF NOT EXISTS admin(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+username TEXT UNIQUE,
+password TEXT
 );
+
+INSERT INTO admin(username,password)
+VALUES
+('admin','123456');
