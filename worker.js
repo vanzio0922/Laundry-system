@@ -15,6 +15,11 @@ export default {
       return Response.json(results);
 
     }
+    if (url.pathname === "/admin") {
+    return env.ASSETS.fetch(
+        new Request(new URL("/admin.html", request.url))
+    );
+   }
 
     // ==========================
     // DASHBOARD
