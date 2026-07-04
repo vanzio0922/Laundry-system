@@ -1,0 +1,35 @@
+body{
+margin:0;
+font-family:Arial,sans-serif;
+display:flex;
+background:#f5f5f5;
+}
+
+.sidebar{
+width:240px;
+background:#1e88e5;
+color:white;
+min-height:100vh;
+padding:20px;
+}
+
+.sidebar ul{
+list-style:none;
+padding:0;
+}
+
+.sidebar li{
+padding:12px;
+cursor:pointer;
+border-radius:8px;
+margin-bottom:8px;
+}
+
+.sidebar li:hover{
+background:rgba(255,255,255,.2);
+}
+
+.content{
+flex:1;
+padding:30px;
+}
