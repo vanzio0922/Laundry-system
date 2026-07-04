@@ -109,15 +109,14 @@ html += "<th>Satuan</th>";
 html += "<th>Harga</th>";
 html += "</tr>";
 
-data.forEach(item=>{
+data.forEach(item=> {
 
-html += `
-<tr>
-<td>${item.nama}</td>
-<td>${item.satuan}</td>
-<td>Rp ${item.harga}</td>
-</tr>
-`;
+
+html += "<tr>";
+html += "<td>" + item.nama + "</td>";
+html += "<td>" + item.satuan + "</td>";
+html += "<td>Rp " + item.harga + "</td>";
+html += "</tr>";
 
 });
 
