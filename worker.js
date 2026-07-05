@@ -6,15 +6,38 @@ export default {
     // ==========================
     // API DAFTAR HARGA
     // ==========================
-    if (url.pathname === "/api/services") {
+   if (url.pathname === "/api/services") {
 
-      const { results } = await env.DB.prepare(
-        "SELECT * FROM services ORDER BY id"
-      ).all();
+    if (request.method === "GET") {
 
-      return Response.json(results);
+        const { results } = await env.DB.prepare(
+            "SELECT * FROM services ORDER BY id"
+        ).all();
+
+        return Response.json(results);
 
     }
+
+    if (request.method === "POST") {
+
+        // nanti kita isi
+
+    }
+
+    if (request.method === "PUT") {
+
+        // nanti kita isi
+
+    }
+
+    if (request.method === "DELETE") {
+
+        // nanti kita isi
+
+    }
+
+}
+
     if (url.pathname === "/admin") {
     return env.ASSETS.fetch(
         new Request(new URL("/admin.html", request.url))
