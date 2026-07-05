@@ -86,7 +86,7 @@ password TEXT
 
 );
 
-INSERT INTO admin(username,password)
+INSERT OR IGNORE INTO admin(username,password)
 
 VALUES
 
