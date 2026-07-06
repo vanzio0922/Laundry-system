@@ -87,9 +87,7 @@ password TEXT
 );
 
 INSERT OR IGNORE INTO admin(username,password)
-
 VALUES
-
 ('admin','123456');
 
 -- =========================================
@@ -108,3 +106,47 @@ VALUES
 ('Setrika','Kg',4000,'Reguler',1,'Hari',1),
 
 ('Bed Cover','Pcs',35000,'Special',3,'Hari',1);
+-- =========================================
+-- SETTINGS
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS settings (
+
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+setting_key TEXT UNIQUE,
+
+setting_value TEXT,
+
+keterangan TEXT,
+
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+INSERT OR IGNORE INTO settings
+(setting_key,setting_value,keterangan)
+
+VALUES
+
+('laundry_name','Vanzio Laundry','Nama Laundry'),
+
+('laundry_address','','Alamat Laundry'),
+
+('laundry_phone','','Nomor WhatsApp Admin'),
+
+('currency','IDR','Mata Uang'),
+
+('use_category','1','Gunakan Kategori'),
+
+('use_estimasi','1','Gunakan Estimasi'),
+
+('use_express','0','Gunakan Layanan Kilat'),
+
+('use_share_location','1','Gunakan Share Lokasi'),
+
+('use_queue_number','1','Gunakan Nomor Antrian'),
+
+('use_whatsapp_notification','1','Kirim WhatsApp Otomatis');
