@@ -55,13 +55,137 @@ function loadOrders() {
 // MASTER LAYANAN
 // =======================
 
-function loadMasterLayanan() {
+async function loadMasterLayanan() {
 
     console.log("Master Layanan dibuka");
 
-    document.getElementById("content").innerHTML = `
+    try {
+
+        const res = await fetch("/api/services");
+        const data = await res.json();
+
+        let html = `
         <h2>🧺 Master Layanan</h2>
-        <p>Loading...</p>
+
+        <button id="btnTambah" onclick="showTambahLayanan()">
+    ➕ Tambah Layanan
+</button>
+
+        <table class="table">
+
+            <tr>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Satuan</th>
+                <th>Kategori</th>
+                <th>Estimasi</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+  `;
+
+        data.forEach(item => {
+
+    html += `
+    <tr>
+
+        <td>${item.nama}</td>
+
+        <td>Rp ${item.harga}</td>
+
+        <td>${item.satuan}</td>
+
+        <td>${item.kategori}</td>
+
+        <td>${item.estimasi} ${item.estimasi_satuan}</td>
+
+        <td>${item.aktif ? "🟢 Aktifkan" : "⛔ Nonaktifkan"}</td>
+
+        <td>
+
+            <button onclick="editService(${item.id})">
+                ✏️ Edit
+            </button>
+
+            <button onclick="toggleService(${item.id}, ${item.aktif})">
+                ${item.aktif ? "🟢 Aktifkan" : "⛔ Nonaktifkan"}
+            </button>
+             </td>
+             
+    </tr>
+
+    `;
+            
+  });
+
+        html += "</table>";
+
+        document.getElementById("content").innerHTML = html;
+
+    } catch (err) {
+
+        console.error(err);
+
+        document.getElementById("content").innerHTML = `
+            <h2>🧺 Master Layanan</h2>
+            <p>❌ Gagal mengambil data layanan.</p>
+    `;
+  }
+
+}
+
+function showTambahLayanan() {
+
+    document.getElementById("content").innerHTML = `
+
+    <h2>🧺 Tambah Layanan</h2>
+
+    <div class="form">
+
+        <label>Nama Layanan</label>
+        <input type="text" id="nama">
+
+        <label>Harga</label>
+        <input type="number" id="harga">
+
+        <label>Satuan</label>
+
+        <select id="satuan">
+            <option>Kg</option>
+            <option>Pcs</option>
+            <option>Pasang</option>
+        </select>
+
+        <label>Kategori</label>
+
+        <select id="kategori">
+            <option>Reguler</option>
+            <option>Special</option>
+        </select>
+
+        <label>Estimasi</label>
+
+        <input type="number" id="estimasi" value="2">
+
+        <label>Satuan Estimasi</label>
+
+        <select id="estimasi_satuan">
+            <option>Hari</option>
+            <option>Jam</option>
+        </select>
+
+        <br><br>
+
+        <button onclick="simpanLayanan()">
+            💾 Simpan
+        </button>
+
+        <button onclick="loadMasterLayanan()">
+            ❌ Batal
+        </button>
+
+    </div>
+
     `;
 
 }
@@ -93,6 +217,24 @@ function loadSettings() {
         <h2>⚙ Pengaturan</h2>
         <p>Coming Soon...</p>
     `;
+
+}
+
+function editService(id){
+
+    console.log("Edit layanan :", id);
+
+}
+
+function toggleService(id, aktif){
+
+    console.log("Ubah status :", id, aktif);
+
+}
+
+function simpanLayanan(){
+
+    console.log("Simpan layanan");
 
 }
 
