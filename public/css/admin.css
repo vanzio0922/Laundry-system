@@ -80,3 +80,49 @@ font-size:30px;
 font-weight:bold;
 color:#1976d2;
 }
+
+/* =========================
+   MASTER LAYANAN
+========================= */
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    background:white;
+}
+
+.table th,
+.table td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:left;
+}
+
+.table th{
+    background:#1976d2;
+    color:white;
+}
+
+.table tr:nth-child(even){
+    background:#f9f9f9;
+}
+
+.table tr:hover{
+    background:#f1f1f1;
+}
+
+#btnTambah{
+    margin-bottom:15px;
+    padding:10px 16px;
+    border:none;
+    border-radius:6px;
+    background:#28a745;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+#btnTambah:hover{
+    background:#218838;
+}
