@@ -19,8 +19,28 @@ export default {
     }
 
     if (request.method === "POST") {
+    const body = await request.json();
 
-        // nanti kita isi
+    const result = await env.DB.prepare(`
+        INSERT INTO services
+        (nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
+        VALUES (?,?,?,?,?,?,1)
+    `)
+    .bind(
+        body.nama,
+        body.satuan,
+        body.harga,
+        body.kategori,
+        body.estimasi,
+        body.estimasi_satuan
+    )
+    .run();
+
+    return Response.json({
+        success: true,
+        id: result.meta.last_row_id
+    });
+}
 
     }
 
