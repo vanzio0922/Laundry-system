@@ -42,8 +42,6 @@ export default {
     });
 }
 
-    }
-
     if (request.method === "PUT") {
 
         return Response.json({
