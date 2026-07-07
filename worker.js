@@ -201,15 +201,4 @@ document.getElementById("harga").innerHTML = html;
     });
 
   }
-}    }
-
-    // ==========================
-    // 404
-    // ==========================
-
-    return new Response("404 Not Found",{
-      status:404
-    });
-
-  }
 }
