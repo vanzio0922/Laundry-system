@@ -46,13 +46,19 @@ export default {
 
     if (request.method === "PUT") {
 
-        // nanti kita isi
+        return Response.json({
+            success: false,
+            message: "Belum dibuat"
+        });
 
     }
 
     if (request.method === "DELETE") {
 
-        // nanti kita isi
+        return Response.json({
+            success: false,
+            message: "Belum dibuat"
+        });
 
     }
 
@@ -187,6 +193,17 @@ document.getElementById("harga").innerHTML = html;
       });
 
     }
+
+    // ==========================
+    // 404
+    // ==========================
+
+    return new Response("404 Not Found",{
+      status:404
+    });
+
+  }
+}    }
 
     // ==========================
     // 404
