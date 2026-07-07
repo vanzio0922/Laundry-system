@@ -99,7 +99,7 @@ async function loadMasterLayanan() {
 
         <td>${item.estimasi} ${item.estimasi_satuan}</td>
 
-        <td>${item.aktif ? "🟢 Aktifkan" : "⛔ Nonaktifkan"}</td>
+        <td>${item.aktif ? "🟢 Aktif" : "⚫ Nonaktif"}</td>
 
         <td>
 
@@ -187,6 +187,52 @@ function showTambahLayanan() {
     </div>
 
     `;
+
+}
+
+async function simpanLayanan(){
+
+    const data = {
+        nama: document.getElementById("nama").value,
+        harga: Number(document.getElementById("harga").value),
+        satuan: document.getElementById("satuan").value,
+        kategori: document.getElementById("kategori").value,
+        estimasi: Number(document.getElementById("estimasi").value),
+        estimasi_satuan: document.getElementById("estimasi_satuan").value
+    };
+
+    if(data.nama === ""){
+    alert("Nama layanan wajib diisi");
+    return;
+}
+
+    if(data.harga <= 0){
+    alert("Harga harus lebih dari 0");
+    return;
+}
+
+    const res = await fetch("/api/services",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+    });
+
+    const json = await res.json();
+
+    if(json.success){
+        alert("Layanan berhasil ditambahkan");
+        document.getElementById("nama").value = "";
+        document.getElementById("harga").value = "";
+        document.getElementById("satuan").value = "Kg";
+        document.getElementById("kategori").value = "Reguler";
+        document.getElementById("estimasi").value = "2";
+        document.getElementById("estimasi_satuan").value = "Hari";
+        loadMasterLayanan();
+    }else{
+        alert("Gagal menyimpan");
+    }
 
 }
 
