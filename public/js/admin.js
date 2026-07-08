@@ -284,11 +284,6 @@ function toggleService(id, aktif){
 
 }
 
-function simpanLayanan(){
-
-    console.log("Simpan layanan");
-
-}
 
 // Halaman pertama
 loadDashboard();
