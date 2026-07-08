@@ -192,6 +192,8 @@ function showTambahLayanan() {
 
 async function simpanLayanan(){
 
+    console.log("Tombol Simpan ditekan");
+    
     const data = {
         nama: document.getElementById("nama").value,
         harga: Number(document.getElementById("harga").value),
@@ -211,6 +213,8 @@ async function simpanLayanan(){
     return;
 }
 
+    console.log(data);
+
     const res = await fetch("/api/services",{
         method:"POST",
         headers:{
@@ -220,6 +224,8 @@ async function simpanLayanan(){
     });
 
     const json = await res.json();
+    
+    console.log(json);
 
     if(json.success){
         alert("Layanan berhasil ditambahkan");
@@ -288,3 +294,5 @@ function simpanLayanan(){
 loadDashboard();
 
 console.log("Dashboard Admin Ready");
+
+alert("admin.js berhasil dimuat");
