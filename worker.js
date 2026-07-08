@@ -4,78 +4,54 @@ export default {
     const url = new URL(request.url);
 
     // ==========================
-    // MASTER LAYANAN
+    // API MASTER LAYANAN
     // ==========================
 
     if (url.pathname === "/api/services") {
 
-      // ================= GET =================
-
       if (request.method === "GET") {
 
-        const { results } = await env.DB.prepare(
-          "SELECT * FROM services ORDER BY id DESC"
-        ).all();
+        const { results } = await env.DB
+          .prepare("SELECT * FROM services ORDER BY id DESC")
+          .all();
 
         return Response.json(results);
 
       }
-
-      // ================= POST =================
 
       if (request.method === "POST") {
 
         const body = await request.json();
 
         const result = await env.DB.prepare(`
-            INSERT INTO services
-            (nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
-            VALUES (?,?,?,?,?,?,1)
+          INSERT INTO services
+          (nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
+          VALUES (?,?,?,?,?,?,1)
         `)
         .bind(
-            body.nama,
-            body.satuan,
-            body.harga,
-            body.kategori,
-            body.estimasi,
-            body.estimasi_satuan
+          body.nama,
+          body.satuan,
+          body.harga,
+          body.kategori,
+          body.estimasi,
+          body.estimasi_satuan
         )
         .run();
 
         return Response.json({
-            success:true,
-            id:result.meta.last_row_id
-        });
-
-      }
-
-      // ================= PUT =================
-
-      if (request.method === "PUT") {
-
-        return Response.json({
-          success:false,
-          message:"Belum dibuat"
-        });
-
-      }
-
-      // ================= DELETE =================
-
-      if (request.method === "DELETE") {
-
-        return Response.json({
-          success:false,
-          message:"Belum dibuat"
+          success:true,
+          id:result.meta.last_row_id
         });
 
       }
 
     }
 
-    return new Response("404 Not Found",{
-      status:404
-    });
+    // ==========================
+    // SEMUA FILE HTML/CSS/JS
+    // ==========================
+
+    return env.ASSETS.fetch(request);
 
   }
 }
