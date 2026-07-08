@@ -44,7 +44,7 @@ function openOrders(){
 // MASTER LAYANAN
 // ==========================
 
-function openServices(){
+function openMasterLayanan(){
 
     setPageTitle("Master Layanan");
 
