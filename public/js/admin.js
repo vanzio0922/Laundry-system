@@ -176,7 +176,7 @@ function showTambahLayanan() {
 
         <br><br>
 
-        <button onclick="simpanLayanan()">
+        <button type="button" onclick="simpanLayanan()">
             💾 Simpan
         </button>
 
