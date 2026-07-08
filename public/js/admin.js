@@ -192,7 +192,7 @@ function showTambahLayanan() {
 
 async function simpanLayanan(){
     
-    alert(simpan ditekan)
+    alert("simpan ditekan");
     console.log("Tombol Simpan ditekan");
     
     const data = {
