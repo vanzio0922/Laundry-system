@@ -9,6 +9,7 @@ export default {
 
     if (url.pathname === "/api/services") {
 
+      // GET
       if (request.method === "GET") {
 
         const { results } = await env.DB
@@ -19,52 +20,53 @@ export default {
 
       }
 
+      // POST
       if (request.method === "POST") {
 
-  try {
+        try {
 
-        const body = await request.json();
+          const body = await request.json();
 
-         console.log(body);
-
-        const result = await env.DB.prepare(`
-          INSERT INTO services
-          (nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
-          VALUES (?,?,?,?,?,?,1)
-    `)
+          const result = await env.DB.prepare(`
+            INSERT INTO services
+            (nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
+            VALUES (?,?,?,?,?,?,1)
+          `)
           .bind(
-          body.nama,
-          body.satuan,
-          body.harga,
-          body.kategori,
-          body.estimasi,
-          body.estimasi_satuan
-    )
-        .run();
+            body.nama,
+            body.satuan,
+            body.harga,
+            body.kategori,
+            body.estimasi,
+            body.estimasi_satuan
+          )
+          .run();
 
-        return Response.json({
-          success: true,
-          result
-    });
+          return Response.json({
+            success: true,
+            result
+          });
 
-      } catch (err) {
+        } catch (err) {
 
-        return Response.json({
-          success: false,
-          error: err.message
-    }, {
-        status: 500
-    });
+          return Response.json({
+            success: false,
+            error: err.message
+          }, {
+            status: 500
+          });
 
-  }
+        }
 
-}
+      }
+
+    }
 
     // ==========================
-    // SEMUA FILE HTML/CSS/JS
+    // FILE HTML/CSS/JS
     // ==========================
 
     return env.ASSETS.fetch(request);
 
   }
-  }
+}
