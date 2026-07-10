@@ -94,9 +94,13 @@ function renderMasterLayanan(data){
 
                 </button>
 
-                <button onclick="toggleService(${item.id})">
-
-                    ⛔
+                <button onclick="toggleService(${item.id}, ${item.aktif})">
+               ${item.aktif ? "⛔ Nonaktifkan" : "🟢 Aktifkan"}
+               
+               </button>
+               
+               <button onclick="hapusService(${item.id})">
+                🗑️ Hapus
 
                 </button>
 
@@ -351,5 +355,55 @@ Batal
 </div>
 
 `;
+
+}
+
+async function toggleService(id, aktif){
+
+    const hasil = await API.put("/api/services",{
+        id: id,
+        aktif: aktif ? 0 : 1,
+        action: "toggle"
+    });
+
+    if(hasil.success){
+        loadMasterLayanan();
+    }else{
+        alert("Gagal mengubah status");
+    }
+
+}
+
+async function hapusService(id){
+
+    const yakin = confirm("Yakin ingin menghapus layanan ini?");
+
+    if(!yakin){
+        return;
+    }
+
+    try{
+
+        const hasil = await API.delete("/api/services?id="+id);
+
+        if(hasil.success){
+
+            alert("Layanan berhasil dihapus");
+
+            loadMasterLayanan();
+
+        }else{
+
+            alert("Gagal menghapus");
+
+        }
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Terjadi kesalahan");
+
+    }
 
 }
