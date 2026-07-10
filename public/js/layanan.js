@@ -241,3 +241,115 @@ async function simpanLayanan(){
     }
 
 }
+
+async function updateLayanan(id){
+
+    const data = {
+
+        id:id,
+
+        nama:document.getElementById("nama").value,
+
+        harga:Number(document.getElementById("harga").value),
+
+        satuan:document.getElementById("satuan").value,
+
+        kategori:document.getElementById("kategori").value,
+
+        estimasi:Number(document.getElementById("estimasi").value),
+
+        estimasi_satuan:document.getElementById("estimasi_satuan").value
+
+    };
+
+    const hasil = await API.put("/api/services",data);
+
+    if(hasil.success){
+
+        alert("Berhasil diupdate");
+
+        loadMasterLayanan();
+
+    }else{
+
+        alert("Gagal update");
+
+    }
+
+}
+
+async function editService(id){
+
+    const data = await API.get("/api/services");
+
+    const item = data.find(x => x.id == id);
+
+    if(!item) return;
+
+    document.getElementById("content").innerHTML = `
+
+<h2>Edit Layanan</h2>
+
+<div class="form">
+
+<label>Nama</label>
+<input id="nama" value="${item.nama}">
+
+<label>Harga</label>
+<input id="harga" type="number" value="${item.harga}">
+
+<label>Satuan</label>
+
+<select id="satuan">
+
+<option ${item.satuan=="Kg"?"selected":""}>Kg</option>
+
+<option ${item.satuan=="Pcs"?"selected":""}>Pcs</option>
+
+<option ${item.satuan=="Pasang"?"selected":""}>Pasang</option>
+
+</select>
+
+<label>Kategori</label>
+
+<select id="kategori">
+
+<option ${item.kategori=="Reguler"?"selected":""}>Reguler</option>
+
+<option ${item.kategori=="Special"?"selected":""}>Special</option>
+
+</select>
+
+<label>Estimasi</label>
+
+<input id="estimasi" type="number" value="${item.estimasi}">
+
+<label>Satuan Estimasi</label>
+
+<select id="estimasi_satuan">
+
+<option ${item.estimasi_satuan=="Hari"?"selected":""}>Hari</option>
+
+<option ${item.estimasi_satuan=="Jam"?"selected":""}>Jam</option>
+
+</select>
+
+<br><br>
+
+<button onclick="updateLayanan(${item.id})">
+
+💾 Update
+
+</button>
+
+<button onclick="loadMasterLayanan()">
+
+Batal
+
+</button>
+
+</div>
+
+`;
+
+}
