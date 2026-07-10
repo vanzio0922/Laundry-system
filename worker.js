@@ -64,7 +64,26 @@ export default {
       if (request.method === "PUT") {
 
         const body = await request.json();
+      if(body.action === "toggle"){
 
+        const result = await env.DB.prepare(`
+            UPDATE services
+            SET aktif=?
+            WHERE id=?
+        `)
+        .bind(
+            body.aktif,
+            body.id
+        )
+        .run();
+
+        return Response.json({
+            success:true,
+            result
+        });
+
+    }
+      
         const result = await env.DB.prepare(`
           UPDATE services
           SET
@@ -93,7 +112,27 @@ export default {
         });
 
       }
+    
+// ================= DELETE =================
 
+      if(request.method==="DELETE"){
+
+        const id = url.searchParams.get("id");
+
+        const result = await env.DB.prepare(`
+           DELETE FROM services
+            WHERE id=?
+        `)
+        .bind(id)
+        .run();
+
+        return Response.json({
+          success:true,
+          result
+        });
+
+      }
+      
     }
 
     // ==========================
