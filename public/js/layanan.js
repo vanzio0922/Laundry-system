@@ -191,3 +191,53 @@ function showTambahLayanan(){
     `;
 
 }
+
+// ===================================
+// SIMPAN LAYANAN
+// ===================================
+
+async function simpanLayanan(){
+
+    try{
+
+        const data = {
+
+            nama: document.getElementById("nama").value.trim(),
+
+            harga: Number(document.getElementById("harga").value),
+
+            satuan: document.getElementById("satuan").value,
+
+            kategori: document.getElementById("kategori").value,
+
+            estimasi: Number(document.getElementById("estimasi").value),
+
+            estimasi_satuan: document.getElementById("estimasi_satuan").value
+
+        };
+
+        if(data.nama === ""){
+
+            alert("Nama layanan wajib diisi");
+
+            return;
+
+        }
+
+        const hasil = await API.post("/api/services", data);
+
+        console.log(hasil);
+
+        alert("Layanan berhasil disimpan");
+
+        loadMasterLayanan();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Gagal menyimpan layanan");
+
+    }
+
+}
