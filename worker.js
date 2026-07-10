@@ -9,7 +9,7 @@ export default {
 
     if (url.pathname === "/api/services") {
 
-      // GET
+      // ================= GET =================
       if (request.method === "GET") {
 
         const { results } = await env.DB
@@ -20,7 +20,7 @@ export default {
 
       }
 
-      // POST
+      // ================= POST =================
       if (request.method === "POST") {
 
         try {
@@ -57,6 +57,40 @@ export default {
           });
 
         }
+
+      }
+
+      // ================= PUT =================
+      if (request.method === "PUT") {
+
+        const body = await request.json();
+
+        const result = await env.DB.prepare(`
+          UPDATE services
+          SET
+            nama=?,
+            satuan=?,
+            harga=?,
+            kategori=?,
+            estimasi=?,
+            estimasi_satuan=?
+          WHERE id=?
+        `)
+        .bind(
+          body.nama,
+          body.satuan,
+          body.harga,
+          body.kategori,
+          body.estimasi,
+          body.estimasi_satuan,
+          body.id
+        )
+        .run();
+
+        return Response.json({
+          success: true,
+          result
+        });
 
       }
 
