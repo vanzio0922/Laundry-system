@@ -237,11 +237,4 @@ export default {
     return env.ASSETS.fetch(request);
 
   }
-}    // ==========================
-    // FILE HTML/CSS/JS
-    // ==========================
-
-    return env.ASSETS.fetch(request);
-
-  }
 }
