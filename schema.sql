@@ -40,9 +40,11 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 
 nama TEXT NOT NULL,
 
-hp TEXT,
+telepon TEXT,
 
 alamat TEXT,
+
+member TEXT DEFAULT 'Reguler',
 
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
