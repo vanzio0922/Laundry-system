@@ -1,6 +1,11 @@
 // ===================================
 // ORDER LAUNDRY
 // ===================================
+// ===================================
+// DATA ORDER
+// ===================================
+
+let orderItems = [];
 
 async function openOrders(){
 
@@ -33,6 +38,8 @@ async function loadOrder(){
 }
 
 function renderOrder(invoice, customers, services){
+
+orderItems = [];
 
 let customerOption = "";
 
@@ -148,5 +155,115 @@ Rp<span id="grandTotal">0</span>
 </div>
 
 `;
+
+}
+
+function tambahItem(){
+
+    const service = document.getElementById("service");
+
+    const option = service.options[service.selectedIndex];
+
+    const id = Number(option.value);
+
+    const nama = option.text.split("-")[0].trim();
+
+    const harga = Number(option.dataset.harga);
+
+    const satuan = option.dataset.satuan;
+
+    const qty = Number(document.getElementById("qty").value);
+
+    if(qty <= 0){
+
+        alert("Qty harus lebih dari 0");
+
+        return;
+
+    }
+
+    orderItems.push({
+
+        service_id:id,
+
+        nama,
+
+        harga,
+
+        qty,
+
+        satuan,
+
+        subtotal:harga*qty
+
+    });
+
+    renderItems();
+
+}
+
+function renderItems(){
+
+    let html="";
+
+    let total=0;
+
+    orderItems.forEach((item,index)=>{
+
+        total += item.subtotal;
+
+        html += `
+
+        <div class="card-item">
+
+            <b>${item.nama}</b><br>
+
+            ${item.qty} ${item.satuan}
+
+            × Rp${item.harga.toLocaleString("id-ID")}
+
+            <br>
+
+            <b>
+
+            Rp${item.subtotal.toLocaleString("id-ID")}
+
+            </b>
+
+            <br>
+
+            <button onclick="hapusItem(${index})">
+
+                🗑 Hapus
+
+            </button>
+
+            <hr>
+
+        </div>
+
+        `;
+
+    });
+
+    if(orderItems.length==0){
+
+        html="Belum ada layanan.";
+
+    }
+
+    document.getElementById("listItem").innerHTML=html;
+
+    document.getElementById("grandTotal").innerText=
+
+        total.toLocaleString("id-ID");
+
+}
+
+function hapusItem(index){
+
+    orderItems.splice(index,1);
+
+    renderItems();
 
 }
