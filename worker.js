@@ -230,6 +230,53 @@ export default {
 
 }
 
+// ==========================================
+// API ORDER
+// ==========================================
+
+if (url.pathname === "/api/orders/new") {
+
+    const now = new Date();
+
+    const y = now.getFullYear();
+
+    const m = String(now.getMonth()+1).padStart(2,"0");
+
+    const d = String(now.getDate()).padStart(2,"0");
+
+    const prefix = `VZ${y}${m}${d}`;
+
+    const { results } = await env.DB.prepare(`
+        SELECT invoice
+        FROM orders
+        WHERE invoice LIKE ?
+        ORDER BY invoice DESC
+        LIMIT 1
+    `)
+    .bind(prefix + "%")
+    .all();
+
+    let nomor = 1;
+
+    if(results.length){
+
+        nomor =
+            parseInt(results[0].invoice.slice(-4)) + 1;
+
+    }
+
+    const invoice =
+        prefix +
+        String(nomor).padStart(4,"0");
+
+    return Response.json({
+
+        invoice
+
+    });
+
+}
+
     // ==========================
     // FILE HTML/CSS/JS
     // ==========================
