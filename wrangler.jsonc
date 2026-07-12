@@ -23,8 +23,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "vanzio-laundry-db",
-      "database_id": "ce508705-ebfc-4e8f-a8ad-48d43ba74bc7"
+      "database_name": "vanzio-laundry-v1",
+      "database_id": "e1a6fd76-641b-4377-80cc-0a3ae38402ac"
     }
   ]
 }
