@@ -36,7 +36,7 @@ function openOrders(){
 
     setPageTitle("Order Laundry");
 
-    loadOrders();
+    loadOrder();
 
 }
 
