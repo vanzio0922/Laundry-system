@@ -134,3 +134,8 @@ export async function handle(request, env){
       
     }
     
+return new Response("Not Found", {
+      status: 404
+    });
+
+}
