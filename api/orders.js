@@ -131,3 +131,9 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
     }
 
 }
+
+return new Response("Not Found", {
+      status: 404
+    });
+
+}
