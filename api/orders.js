@@ -82,8 +82,8 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
             body.subtotal,
             body.diskon,
             body.total,
-            body.dibayar,
-            body.sisa,
+            0,              // dibayar
+            body.total,     // sisa
             "Masuk"
         )
         .run();
@@ -131,6 +131,7 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
     }
 
 }
+
 return new Response("Not Found", {
       status: 404
     });
