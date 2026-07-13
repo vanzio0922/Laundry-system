@@ -1,8 +1,9 @@
 -- =========================================
 -- VANZIO LAUNDRY
--- DATABASE VERSION : 1.0
+-- DATABASE FINAL V1
 -- =========================================
 
+-- =========================================
 -- MASTER LAYANAN
 -- =========================================
 
@@ -11,6 +12,8 @@ CREATE TABLE IF NOT EXISTS services (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 
 nama TEXT NOT NULL,
+
+deskripsi TEXT,
 
 satuan TEXT NOT NULL DEFAULT 'Kg',
 
@@ -31,7 +34,7 @@ updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================
--- PELANGGAN
+-- MASTER PELANGGAN
 -- =========================================
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -40,13 +43,21 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 
 nama TEXT NOT NULL,
 
-telepon TEXT,
+telepon TEXT NOT NULL,
 
 alamat TEXT,
 
 member TEXT DEFAULT 'Reguler',
 
-created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+poin INTEGER DEFAULT 0,
+
+catatan TEXT,
+
+aktif INTEGER DEFAULT 1,
+
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
 );
 
@@ -58,19 +69,31 @@ CREATE TABLE IF NOT EXISTS orders (
 
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-customer_id INTEGER,
+invoice TEXT UNIQUE,
 
-service_id INTEGER,
+customer_id INTEGER NOT NULL,
 
 tanggal TEXT,
 
-berat REAL,
+subtotal INTEGER DEFAULT 0,
 
-total INTEGER,
+diskon INTEGER DEFAULT 0,
+
+ongkir INTEGER DEFAULT 0,
+
+total INTEGER DEFAULT 0,
+
+dibayar INTEGER DEFAULT 0,
+
+sisa INTEGER DEFAULT 0,
 
 status TEXT DEFAULT 'Masuk',
 
-created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+catatan TEXT,
+
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
 );
 
@@ -88,39 +111,47 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 -- =========================================
--- ADMIN
+-- DETAIL ORDER
 -- =========================================
 
-CREATE TABLE IF NOT EXISTS admin(
+CREATE TABLE IF NOT EXISTS order_items (
 
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-username TEXT UNIQUE,
+order_id INTEGER NOT NULL,
 
-password TEXT
+service_id INTEGER NOT NULL,
+
+qty REAL DEFAULT 1,
+
+harga INTEGER,
+
+subtotal INTEGER
 
 );
 
-INSERT OR IGNORE INTO admin(username,password)
-VALUES
-('admin','123456');
-
 -- =========================================
--- DATA AWAL MASTER LAYANAN
+-- PEMBAYARAN
 -- =========================================
 
-INSERT INTO services
-(nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
+CREATE TABLE IF NOT EXISTS payments (
 
-VALUES
+id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-('Cuci Kering','Kg',5000,'Reguler',2,'Hari',1),
+order_id INTEGER NOT NULL,
 
-('Cuci Setrika','Kg',6000,'Reguler',2,'Hari',1),
+tanggal TEXT,
 
-('Setrika','Kg',4000,'Reguler',1,'Hari',1),
+jumlah INTEGER,
 
-('Bed Cover','Pcs',35000,'Special',3,'Hari',1);
+metode TEXT,
+
+catatan TEXT,
+
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
 -- =========================================
 -- SETTINGS
 -- =========================================
@@ -143,25 +174,57 @@ updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
 INSERT OR IGNORE INTO settings
 (setting_key,setting_value,keterangan)
-
 VALUES
 
 ('laundry_name','Vanzio Laundry','Nama Laundry'),
-
 ('laundry_address','','Alamat Laundry'),
-
-('laundry_phone','','Nomor WhatsApp Admin'),
-
+('laundry_phone','','Nomor WhatsApp'),
 ('currency','IDR','Mata Uang'),
+('use_category','1','Kategori'),
+('use_estimasi','1','Estimasi'),
+('use_express','0','Express'),
+('use_share_location','1','Share Lokasi'),
+('use_queue_number','1','Nomor Antrian'),
+('use_whatsapp_notification','1','WA Otomatis');
 
-('use_category','1','Gunakan Kategori'),
+-- =========================================
+-- ADMIN
+-- =========================================
 
-('use_estimasi','1','Gunakan Estimasi'),
+CREATE TABLE IF NOT EXISTS admin (
 
-('use_express','0','Gunakan Layanan Kilat'),
+id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-('use_share_location','1','Gunakan Share Lokasi'),
+username TEXT UNIQUE,
 
-('use_queue_number','1','Gunakan Nomor Antrian'),
+password TEXT,
 
-('use_whatsapp_notification','1','Kirim WhatsApp Otomatis');
+nama TEXT,
+
+role TEXT DEFAULT 'Administrator',
+
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+INSERT OR IGNORE INTO admin
+(username,password,nama)
+VALUES
+('admin','123456','Administrator');
+
+-- =========================================
+-- DATA AWAL MASTER LAYANAN
+-- =========================================
+
+INSERT OR IGNORE INTO services
+(id,nama,satuan,harga,kategori,estimasi,estimasi_satuan,aktif)
+
+VALUES
+
+(1,'Cuci Kering','Kg',5000,'Reguler',2,'Hari',1),
+
+(2,'Cuci Setrika','Kg',6000,'Reguler',2,'Hari',1),
+
+(3,'Setrika','Kg',4000,'Reguler',1,'Hari',1),
+
+(4,'Bed Cover','Pcs',35000,'Special',3,'Hari',1);
