@@ -98,19 +98,6 @@ updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================================
--- ORDER_ITEMS
--- =========================================
-
-CREATE TABLE IF NOT EXISTS order_items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id INTEGER,
-    service_id INTEGER,
-    qty REAL,
-    harga REAL,
-    subtotal REAL
-);
-
--- =========================================
 -- DETAIL ORDER
 -- =========================================
 
