@@ -2,6 +2,7 @@ export async function handle(request, env){
 
     const url = new URL(request.url);
 
+
 // ==========================================
 // API ORDER
 // ==========================================
@@ -68,8 +69,8 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
                 subtotal,
                 diskon,
                 total,
-                bayar,
-                kembali,
+                dibayar,
+                sisa,
                 status
             )
             VALUES(?,?,?,?,?,?,?,?,?)
@@ -81,8 +82,8 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
             body.subtotal,
             body.diskon,
             body.total,
-             0,              // dibayar
-            body.total,     // sisa
+            body.dibayar,
+            body.sisa,
             "Masuk"
         )
         .run();
@@ -128,11 +129,5 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
         });
 
     }
-
-}
-
-return new Response("Not Found", {
-      status: 404
-    });
 
 }
