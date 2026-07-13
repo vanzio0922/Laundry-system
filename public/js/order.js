@@ -41,7 +41,11 @@ function renderOrder(invoice, customers, services){
 
 orderItems = [];
 
-let customerOption = "";
+let customerOption = `
+<option value="">
+-- Pilih Pelanggan --
+</option>
+`;
 
 customers.forEach(c=>{
 
@@ -265,5 +269,84 @@ function hapusItem(index){
     orderItems.splice(index,1);
 
     renderItems();
+
+}
+
+async function simpanOrder(){
+
+    // Cek apakah ada layanan
+    if(orderItems.length==0){
+
+        alert("Belum ada layanan.");
+
+        return;
+
+    }
+
+    // Cek pelanggan
+    const customerId =
+        Number(document.getElementById("customer").value);
+
+    if(!customerId){
+
+        alert("Pilih pelanggan.");
+
+        return;
+
+    }
+
+    // Hitung subtotal
+    const subtotal =
+        orderItems.reduce((a,b)=>a+b.subtotal,0);
+
+    const data={
+
+        invoice:
+            document.getElementById("invoice").value,
+
+        tanggal:
+            document.getElementById("tanggal").value,
+
+        customer_id:
+            customerId,
+
+        subtotal,
+
+        diskon:0,
+
+        total:subtotal,
+
+        bayar:0,
+
+        kembali:0,
+
+        items:orderItems
+
+    };
+
+    try{
+
+        const result =
+            await API.post("/api/orders",data);
+
+        if(result.success){
+
+            alert("Order berhasil disimpan");
+
+            orderItems=[];
+
+            renderItems();
+
+            loadOrder();
+
+        }
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Gagal menyimpan order");
+
+    }
 
 }
