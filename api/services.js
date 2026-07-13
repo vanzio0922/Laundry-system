@@ -1,5 +1,4 @@
-export default {
-  async fetch(request, env) {
+export async function handle(request, env){
 
     const url = new URL(request.url);
 
