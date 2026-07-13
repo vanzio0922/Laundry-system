@@ -81,8 +81,8 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
             body.subtotal,
             body.diskon,
             body.total,
-            body.bayar,
-            body.kembali,
+             0,              // dibayar
+            body.total,     // sisa
             "Masuk"
         )
         .run();
