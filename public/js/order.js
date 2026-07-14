@@ -131,6 +131,10 @@ step="0.1">
 
 </button>
 
+<button onclick="detailOrder(${o.id})">
+📄 Detail
+</button>
+
 <hr>
 
 <div id="listItem">
@@ -348,5 +352,70 @@ async function simpanOrder(){
         alert("Gagal menyimpan order");
 
     }
+
+}
+
+async function detailOrder(id){
+
+    const data =
+        await API.get("/api/orders/"+id);
+
+    renderDetailOrder(data);
+
+}
+
+async function openOrderList(){
+
+    document.getElementById("pageTitle").innerText =
+        "Daftar Order";
+
+    const data = await API.get("/api/orders");
+
+    renderOrderList(data);
+
+}
+
+function renderOrderList(data){
+
+    let html = `
+        <h2>📋 Daftar Order</h2>
+
+        <button onclick="openOrders()">
+            ➕ Order Baru
+        </button>
+
+        <br><br>
+    `;
+
+    data.forEach(o=>{
+
+        html += `
+            <div class="card">
+
+                <b>${o.invoice}</b><br>
+
+                ${o.customer}<br>
+
+                ${o.tanggal}<br>
+
+                Rp${Number(o.total).toLocaleString("id-ID")}<br>
+
+                Status :
+                <b>${o.status}</b>
+
+                <br><br>
+
+                <button onclick="detailOrder(${o.id})">
+                    📄 Detail
+                </button>
+
+            </div>
+
+            <br>
+        `;
+
+    });
+
+    document.getElementById("content").innerHTML = html;
 
 }
