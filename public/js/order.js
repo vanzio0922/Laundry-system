@@ -131,9 +131,6 @@ step="0.1">
 
 </button>
 
-<button onclick="detailOrder(${o.id})">
-📄 Detail
-</button>
 
 <hr>
 
@@ -364,6 +361,68 @@ async function detailOrder(id){
 
 }
 
+async function detailOrder(id){
+
+    const data =
+        await API.get("/api/orders/"+id);
+
+    renderDetailOrder(data);
+
+}
+
+function renderDetailOrder(data){
+
+    let html = `
+        <h2>📄 Detail Order</h2>
+
+        <p><b>Invoice :</b> ${data.order.invoice}</p>
+        <p><b>Customer :</b> ${data.order.nama}</p>
+        <p><b>Tanggal :</b> ${data.order.tanggal}</p>
+        <hr>
+    `;
+
+    data.items.forEach(item=>{
+
+        html += `
+            <div class="card">
+
+                <b>${item.layanan}</b><br>
+
+                Qty :
+                ${item.qty} ${item.satuan}<br>
+
+                Harga :
+                Rp${Number(item.harga).toLocaleString("id-ID")}<br>
+
+                Subtotal :
+                Rp${Number(item.subtotal).toLocaleString("id-ID")}
+
+            </div><br>
+        `;
+
+    });
+
+    html += `
+
+        <h3>
+
+        Total :
+        Rp${Number(data.order.total).toLocaleString("id-ID")}
+
+        </h3>
+
+        <button onclick="openOrderList()">
+
+            ⬅ Kembali
+
+        </button>
+
+    `;
+
+    document.getElementById("content").innerHTML = html;
+
+}
+
 async function openOrderList(){
 
     document.getElementById("pageTitle").innerText =
@@ -402,6 +461,23 @@ function renderOrderList(data){
 
                 Status :
                 <b>${o.status}</b>
+
+                <br><br>
+
+                <button onclick="detailOrder(${o.id})">
+                    📄 Detail
+                </button>
+
+            </div>
+
+            <br>
+        `;
+
+    });
+
+    document.getElementById("content").innerHTML = html;
+
+}                <b>${o.status}</b>
 
                 <br><br>
 
