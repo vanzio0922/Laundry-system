@@ -132,6 +132,97 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
 
 }
 
+if (url.pathname.startsWith("/api/orders/") &&
+    request.method === "GET") {
+
+    const id = url.pathname.split("/").pop();
+
+    const order = await env.DB.prepare(`
+        SELECT
+            o.*,
+            c.nama,
+            c.telepon,
+            c.alamat
+        FROM orders o
+        JOIN customers c
+        ON c.id=o.customer_id
+        WHERE o.id=?
+    `)
+    .bind(id)
+    .first();
+
+    const { results } = await env.DB.prepare(`
+        SELECT
+            oi.*,
+            s.nama as layanan,
+            s.satuan
+        FROM order_items oi
+        JOIN services s
+        ON s.id=oi.service_id
+        WHERE oi.order_id=?
+    `)
+    .bind(id)
+    .all();
+
+    return Response.json({
+
+        order,
+
+        items:results
+
+    });
+
+}
+
+if (url.pathname==="/api/orders/status"
+    &&
+    request.method==="PUT"){
+
+    const body=await request.json();
+
+    await env.DB.prepare(`
+        UPDATE orders
+        SET status=?
+        WHERE id=?
+    `)
+    .bind(
+        body.status,
+        body.id
+    )
+    .run();
+
+    return Response.json({
+
+        success:true
+
+    });
+
+}
+
+// ==========================================
+// DAFTAR ORDER
+// ==========================================
+
+if (url.pathname === "/api/orders" && request.method === "GET") {
+
+    const { results } = await env.DB.prepare(`
+        SELECT
+            o.id,
+            o.invoice,
+            o.tanggal,
+            o.total,
+            o.status,
+            c.nama AS customer
+        FROM orders o
+        JOIN customers c
+        ON c.id = o.customer_id
+        ORDER BY o.id DESC
+    `).all();
+
+    return Response.json(results);
+
+}
+
 return new Response("Not Found", {
       status: 404
     });
