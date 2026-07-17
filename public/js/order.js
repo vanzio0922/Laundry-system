@@ -115,7 +115,28 @@ ${serviceOption}
 
 </select>
 
-<label>Qty / Berat</label>
+<label>📷 Foto Cucian</label>
+
+<input
+id="foto"
+type="file"
+accept="image/*">
+
+<div id="previewFoto"></div>
+
+<br>
+
+<label>⚖ Berat Cucian (Kg)</label>
+
+<input
+id="berat"
+type="number"
+step="0.1"
+value="0">
+
+<br>
+
+<label>Qty Layanan</label>
 
 <input
 id="qty"
@@ -126,9 +147,7 @@ step="0.1">
 <br><br>
 
 <button onclick="tambahItem()">
-
 ➕ Tambah
-
 </button>
 
 
@@ -160,6 +179,32 @@ Rp<span id="grandTotal">0</span>
 </div>
 
 `;
+
+document.getElementById("foto").addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(){
+
+        document.getElementById("previewFoto").innerHTML = `
+            <img
+                src="${reader.result}"
+                style="
+                    width:180px;
+                    border-radius:10px;
+                    margin-top:10px;
+                ">
+        `;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
 
 }
 
@@ -275,6 +320,21 @@ function hapusItem(index){
 
 async function simpanOrder(){
 
+const berat =
+parseFloat(
+document.getElementById("berat").value
+);
+
+const foto =
+document.getElementById("foto").files[0];
+
+let fotoUrl = "";
+
+    if(foto){
+
+        fotoUrl =
+            await uploadFotoCloudinary(foto);
+    }
     // Cek apakah ada layanan
     if(orderItems.length==0){
 
@@ -303,13 +363,17 @@ async function simpanOrder(){
     const data={
 
         invoice:
-            document.getElementById("invoice").value,
+        document.getElementById("invoice").value,
 
         tanggal:
-            document.getElementById("tanggal").value,
+        document.getElementById("tanggal").value,
 
         customer_id:
-            customerId,
+        customerId,
+
+        berat: berat,
+
+        foto: fotoUrl,
 
         subtotal,
 
@@ -334,13 +398,19 @@ async function simpanOrder(){
 
             alert("Order berhasil disimpan");
 
-            orderItems=[];
+          orderItems = [];
 
-            renderItems();
+          renderItems();
 
-            loadOrder();
+          document.getElementById("previewFoto").innerHTML = "";
 
-        }
+          document.getElementById("foto").value = "";
+
+          document.getElementById("berat").value = "0";
+
+          await loadOrder();
+
+    }
 
     }catch(err){
 
@@ -349,6 +419,28 @@ async function simpanOrder(){
         alert("Gagal menyimpan order");
 
     }
+
+}
+
+async function uploadFotoCloudinary(file){
+
+    const fd = new FormData();
+
+    fd.append("file", file);
+
+    const res =
+    await fetch("/api/upload",{
+
+        method:"POST",
+
+        body:fd
+
+    });
+
+    const data =
+    await res.json();
+
+    return data.url;
 
 }
 
@@ -367,10 +459,31 @@ function renderDetailOrder(data){
         <h2>📄 Detail Order</h2>
 
         <p><b>Invoice :</b> ${data.order.invoice}</p>
+
         <p><b>Customer :</b> ${data.order.nama}</p>
+
         <p><b>Tanggal :</b> ${data.order.tanggal}</p>
+
+        <p><b>Berat :</b> ${data.order.berat ?? 0} Kg</p>
+
         <hr>
     `;
+
+    if(data.order.foto){
+
+        html += `
+            <img
+                src="${data.order.foto}"
+                style="
+                    width:220px;
+                    border-radius:12px;
+                    margin-bottom:15px;
+                    border:1px solid #ddd;
+                ">
+            <hr>
+        `;
+
+    }
 
     data.items.forEach(item=>{
 
@@ -388,7 +501,9 @@ function renderDetailOrder(data){
                 Subtotal :
                 Rp${Number(item.subtotal).toLocaleString("id-ID")}
 
-            </div><br>
+            </div>
+
+            <br>
         `;
 
     });
@@ -396,11 +511,14 @@ function renderDetailOrder(data){
     html += `
 
         <h3>
-
-        Total :
-        Rp${Number(data.order.total).toLocaleString("id-ID")}
-
+            Total :
+            Rp${Number(data.order.total).toLocaleString("id-ID")}
         </h3>
+
+        <p>
+            <b>Status :</b>
+            ${data.order.status}
+        </p>
 
         <button onclick="openOrderList()">
 
@@ -468,4 +586,4 @@ function renderOrderList(data){
 
     document.getElementById("content").innerHTML = html;
 
-}
+        }
