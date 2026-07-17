@@ -63,28 +63,50 @@ if (url.pathname === "/api/orders" && request.method === "POST") {
         // Simpan ke tabel orders
         const order = await env.DB.prepare(`
             INSERT INTO orders(
-                invoice,
-                tanggal,
-                customer_id,
-                subtotal,
-                diskon,
-                total,
-                dibayar,
-                sisa,
-                status
-            )
-            VALUES(?,?,?,?,?,?,?,?,?)
+            invoice,
+            tanggal,
+            customer_id,
+            berat,
+            foto,
+            estimasi_selesai,
+            antrian,
+            subtotal,
+            diskon,
+            total,
+            dibayar,
+            sisa,
+            status
+        )
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
         `)
         .bind(
-            body.invoice,
-            body.tanggal,
-            body.customer_id,
-            body.subtotal,
-            body.diskon,
-            body.total,
-            0,              // dibayar
-            body.total,     // sisa
-            "Masuk"
+
+             body.invoice,
+
+              body.tanggal,
+
+              body.customer_id,
+
+              body.berat,
+
+              body.foto,
+
+              body.estimasi_selesai || null,
+
+              body.antrian || 1,
+
+              body.subtotal,
+
+             body.diskon,
+
+              body.total,
+
+             0,
+
+             body.total,
+
+              "Masuk"
+
         )
         .run();
 
@@ -212,6 +234,8 @@ if (url.pathname === "/api/orders" && request.method === "GET") {
             o.tanggal,
             o.total,
             o.status,
+            o.berat,
+            o.foto,
             c.nama AS customer
         FROM orders o
         JOIN customers c
