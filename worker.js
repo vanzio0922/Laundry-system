@@ -6,6 +6,7 @@ import * as Dashboard from "./api/dashboard";
 import * as Settings from "./api/settings";
 import * as Reports from "./api/reports";
 import * as Whatsapp from "./api/whatsapp";
+import * as Upload from "./api/upload";
 
 export default {
 
@@ -51,6 +52,12 @@ export default {
     // WHATSAPP
     if (url.pathname.startsWith("/api/whatsapp")) {
       return Whatsapp.handle(request, env);
+    }
+    
+    if(url.pathname.startsWith("/api/upload")){
+
+    return Upload.handle(request, env);
+
     }
 
     // FILE HTML/CSS/JS
